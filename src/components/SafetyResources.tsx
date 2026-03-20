@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, AlertCircle, Phone, BookOpen, ChevronRight, ExternalLink, Loader2 } from 'lucide-react';
+import { Shield, AlertCircle, Phone, BookOpen, ChevronRight, ExternalLink, Loader2, Heart, Scale, Home, Stethoscope } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
@@ -7,60 +7,77 @@ import { db, handleFirestoreError, OperationType } from '../firebase';
 
 const DEFAULT_RESOURCES = [
   {
-    id: 'signs',
-    title: 'Recognizing the Signs',
-    category: 'signs',
-    icon: 'AlertCircle',
-    color: 'amber',
+    id: 'survivor-support',
+    title: 'Survivor Support & Healing',
+    category: 'support',
+    icon: 'Heart',
+    color: 'rose',
     content: `
-### Common Indicators of Human Trafficking
+### You are not alone.
 
-Human trafficking is often hidden in plain sight. Look for these signs:
+Healing is a journey, and there are people ready to walk with you.
 
-- **Physical Signs**: Signs of physical abuse, malnourishment, or poor hygiene.
-- **Behavioral Signs**: Fearful, anxious, submissive, or avoids eye contact.
-- **Restricted Movement**: Rarely alone, monitored by someone else, or lacks identification documents.
-- **Living Conditions**: Living in overcrowded or substandard housing provided by an employer.
-- **Inconsistent Stories**: Providing scripted or rehearsed answers to questions.
+- **Emotional Support**: It's okay to feel overwhelmed. Professional counseling can help you process your experiences.
+- **Safe Spaces**: There are organizations dedicated to providing secure housing and basic needs.
+- **Empowerment**: You have the right to make choices about your life and future.
 
-*If you suspect something, do not intervene directly. Report it.*
+*Your strength is your own. We are here to support your path to freedom.*
     `
   },
   {
-    id: 'safety',
-    title: 'Personal Safety Tips',
-    category: 'safety',
-    icon: 'Shield',
-    color: 'emerald',
-    content: `
-### How to Stay Safe
-
-Protect yourself and your community with these actionable tips:
-
-1. **Trust Your Instincts**: If a situation feels wrong, it probably is. Leave immediately if possible.
-2. **Share Your Location**: Always let a trusted friend or family member know where you are.
-3. **Be Wary of "Too Good to Be True" Offers**: High-paying jobs with no experience or free travel can be traps.
-4. **Keep Documents Safe**: Never give your passport or ID to an employer or anyone you don't trust.
-5. **Learn Local Hotlines**: Save emergency numbers in your phone under a discreet name.
-    `
-  },
-  {
-    id: 'hotlines',
-    title: 'Emergency Hotlines',
-    category: 'hotlines',
-    icon: 'Phone',
+    id: 'legal-aid',
+    title: 'Legal Rights & Assistance',
+    category: 'legal',
+    icon: 'Scale',
     color: 'blue',
     content: `
-### Immediate Help
+### Your Legal Rights
 
-If you or someone you know is in immediate danger, call local emergency services (911 in the US).
+Regardless of your immigration status, you have rights.
 
-- **National Human Trafficking Hotline (USA)**: 1-888-373-7888
-- **Text HELP to 233733 (BeFree)**
-- **International Justice Mission (IJM)**: [ijm.org](https://www.ijm.org)
-- **Polaris Project**: [polarisproject.org](https://polarisproject.org)
+1. **Right to Protection**: You have the right to be protected from your traffickers.
+2. **Right to Legal Counsel**: You can access lawyers who specialize in trafficking cases.
+3. **T-Visas and U-Visas**: In the US, there are specific visas for victims of trafficking and crime.
+4. **Confidentiality**: Your information is protected by law when seeking help.
 
-*These services are confidential and available 24/7.*
+*Contact a legal aid organization to understand your specific options.*
+    `
+  },
+  {
+    id: 'medical-help',
+    title: 'Medical & Health Services',
+    category: 'medical',
+    icon: 'Stethoscope',
+    color: 'emerald',
+    content: `
+### Accessing Healthcare
+
+Your health is a priority. Many clinics offer free or low-cost services for survivors.
+
+- **Physical Health**: Treatment for injuries, chronic conditions, and general wellness.
+- **Mental Health**: Specialized trauma therapy and support groups.
+- **Reproductive Health**: Confidential screenings and care.
+- **Substance Use Support**: Compassionate care for those struggling with addiction.
+
+*You can receive medical care without fear of judgment or legal repercussions.*
+    `
+  },
+  {
+    id: 'safe-houses',
+    title: 'Emergency Housing & Shelters',
+    category: 'housing',
+    icon: 'Home',
+    color: 'amber',
+    content: `
+### Finding a Safe Place to Stay
+
+If you need to leave a dangerous situation immediately, there are safe houses available.
+
+- **Emergency Shelters**: Short-term housing for immediate safety.
+- **Transitional Housing**: Longer-term support to help you get back on your feet.
+- **Confidential Locations**: Many safe houses keep their addresses private to ensure your security.
+
+*Call the National Human Trafficking Hotline (1-888-373-7888) to find a safe house near you.*
     `
   }
 ];
@@ -104,14 +121,14 @@ export default function SafetyResources() {
           <BookOpen size={24} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Safety Resources</h2>
-          <p className="text-sm text-zinc-500">Learn how to protect yourself and others.</p>
+          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Support Resources</h2>
+          <p className="text-sm text-zinc-500">Confidential help for your journey to safety.</p>
         </div>
       </div>
 
       <div className="grid gap-4">
         {resources.map((resource) => {
-          const IconMap: any = { Shield, AlertCircle, Phone };
+          const IconMap: any = { Shield, AlertCircle, Phone, Heart, Scale, Home, Stethoscope };
           const Icon = IconMap[resource.icon] || BookOpen;
           const isSelected = selectedId === resource.id;
           
@@ -119,6 +136,7 @@ export default function SafetyResources() {
             amber: 'bg-amber-50 text-amber-600 border-amber-100',
             emerald: 'bg-emerald-50 text-emerald-600 border-emerald-100',
             blue: 'bg-blue-50 text-blue-600 border-blue-100',
+            rose: 'bg-rose-50 text-rose-600 border-rose-100',
           };
           const colorClass = colorMap[resource.color] || 'bg-zinc-50 text-zinc-600 border-zinc-100';
 
