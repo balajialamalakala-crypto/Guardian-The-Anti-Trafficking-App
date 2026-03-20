@@ -1,0 +1,5 @@
+{
+  "name": "GuardianLink: Anti-Trafficking Safety App",
+  "description": "A comprehensive safety tool for reporting suspicious activity, accessing emergency resources, and sending SOS alerts to combat human trafficking.",
+  "requestFramePermissions": ["camera", "microphone", "geolocation"]
+}

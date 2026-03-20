@@ -1,0 +1,84 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user safety settings and emergency contacts.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID from Firebase Auth." },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "sosContacts": {
+          "type": "array",
+          "items": {
+            "$ref": "SOSContact"
+          }
+        },
+        "role": { "type": "string", "enum": ["user", "admin"] }
+      },
+      "required": ["uid", "email", "displayName"]
+    },
+    "SOSContact": {
+      "title": "SOS Contact",
+      "description": "Emergency contact details.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string", "format": "email" }
+      },
+      "required": ["id", "name", "phone"]
+    },
+    "SafetyReport": {
+      "title": "Safety Report",
+      "description": "Report of suspicious activity.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" },
+            "address": { "type": "string" }
+          }
+        },
+        "description": { "type": "string" },
+        "photos": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["pending", "investigating", "resolved"] },
+        "isAnonymous": { "type": "boolean" }
+      },
+      "required": ["id", "timestamp", "location", "description"]
+    },
+    "SafetyResource": {
+      "title": "Safety Resource",
+      "description": "Educational content and hotlines.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string", "enum": ["signs", "safety", "hotlines"] },
+        "icon": { "type": "string" }
+      },
+      "required": ["id", "title", "content", "category"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User-specific safety data."
+    },
+    "/reports/{reportId}": {
+      "schema": "SafetyReport",
+      "description": "Public and private safety reports."
+    },
+    "/resources/{resourceId}": {
+      "schema": "SafetyResource",
+      "description": "Global safety resources."
+    }
+  }
+}
