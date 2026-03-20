@@ -1,14 +1,16 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, Suspense, lazy } from 'react';
 import { User, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { auth, db, googleProvider, OperationType, handleFirestoreError } from './firebase';
 import { UserProfile } from './types';
 import Layout from './components/Layout';
-import Dashboard from './components/Dashboard';
-import ReportForm from './components/ReportForm';
-import SafetyResources from './components/SafetyResources';
-import Profile from './components/Profile';
 import { Shield, Loader2, LogIn } from 'lucide-react';
+
+// Lazy load components for efficiency
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const ReportForm = lazy(() => import('./components/ReportForm'));
+const SafetyResources = lazy(() => import('./components/SafetyResources'));
+const Profile = lazy(() => import('./components/Profile'));
 
 interface FirebaseContextType {
   user: User | null;
@@ -128,18 +130,28 @@ export default function App() {
   }
 
   const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'report':
-        return <ReportForm onSubmit={(report) => console.log('Report submitted:', report)} />;
-      case 'resources':
-        return <SafetyResources />;
-      case 'profile':
-        return <Profile />;
-      default:
-        return <Dashboard />;
-    }
+    return (
+      <Suspense fallback={
+        <div className="flex items-center justify-center p-20">
+          <Loader2 size={32} className="animate-spin text-zinc-300" />
+        </div>
+      }>
+        {(() => {
+          switch (activeTab) {
+            case 'dashboard':
+              return <Dashboard />;
+            case 'report':
+              return <ReportForm onSubmit={(report) => console.log('Report submitted:', report)} />;
+            case 'resources':
+              return <SafetyResources />;
+            case 'profile':
+              return <Profile />;
+            default:
+              return <Dashboard />;
+          }
+        })()}
+      </Suspense>
+    );
   };
 
   return (

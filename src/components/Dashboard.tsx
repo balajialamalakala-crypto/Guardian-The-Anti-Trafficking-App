@@ -3,6 +3,7 @@ import { Shield, AlertTriangle, Phone, BookOpen, ChevronRight, Loader2, Sparkles
 import { motion, AnimatePresence } from 'motion/react';
 import SOSButton from './SOSButton';
 import SafetyMap from './Map';
+import SafetyPlan from './SafetyPlan';
 import { getSafetyAdvice } from '../services/gemini';
 import { collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
@@ -134,6 +135,11 @@ const Dashboard = React.memo(() => {
             'I am Safe'
           )}
         </button>
+      </section>
+
+      {/* Safety Plan Generator - High Impact Feature */}
+      <section className="relative z-20" aria-label="Personalized Safety Planning">
+        <SafetyPlan />
       </section>
 
       {/* AI Safety Insight */}
